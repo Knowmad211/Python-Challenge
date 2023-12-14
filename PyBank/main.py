@@ -7,6 +7,8 @@ TotalValue = 0
 OpeningMonth = 0
 ClosingMonth = 0
 TotalDifference = []
+DateList = []
+
 
 with open(csvpath) as csvfile:
 
@@ -25,14 +27,30 @@ with open(csvpath) as csvfile:
        
         TotalDifference.append (ClosingMonth - OpeningMonth)
         OpeningMonth = ClosingMonth
-        TotalDifference.pop(0)
+        DateList.append (row[0])
 
+
+TotalDifference.pop(0)
+
+MaxIndex = TotalDifference.index(max(TotalDifference))
+MinIndex = TotalDifference.index(min(TotalDifference))
+
+DateList.pop(0)
 
     #   print(row)
 print("Financial Analysis")
 print("----------------------------")
 print(f"Total Months: {TotalMonths}")
 print(f"Total: ${TotalValue}")
-print(f"Average Change: ${sum(TotalDifference)/(TotalMonths-1)}")
-print(f"Greatest Increase in Profits: **************** {max(TotalDifference)}")
-print(f"Greatest Decrease in Profits: **************** {min(TotalDifference)}")
+print(f"Average Change: ${round(sum(TotalDifference)/(TotalMonths-1),2)}")
+print(f"Greatest Increase in Profits: {DateList[MaxIndex]} (${max(TotalDifference)})")
+print(f"Greatest Decrease in Profits: {DateList[MinIndex]} (${min(TotalDifference)})")
+
+with open("Analysis/Analysis.txt", "w") as f:
+    print("Financial Analysis", file=f)
+    print("----------------------------", file=f)
+    print(f"Total Months: {TotalMonths}", file=f)
+    print(f"Total: ${TotalValue}", file=f)
+    print(f"Average Change: ${round(sum(TotalDifference)/(TotalMonths-1),2)}", file=f)
+    print(f"Greatest Increase in Profits: {DateList[MaxIndex]} (${max(TotalDifference)})", file=f)
+    print(f"Greatest Decrease in Profits: {DateList[MinIndex]} (${min(TotalDifference)})", file=f)
